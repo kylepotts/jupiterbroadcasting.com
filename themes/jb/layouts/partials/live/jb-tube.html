@@ -6,7 +6,7 @@
   <script type="text/javascript" src="{{ $jbTube.Permalink }}" integrity="{{ $jbTube.Data.Integrity }}"></script>
   <script>
     window.onload = () => {
-      if(jbLive) {
+      if(typeof jbLive !== "undefined") {
         jbLive().then(result => {
         const liveStream = document.getElementById('liveStream')
         if(liveStream != null && liveStream != undefined && result != null && result != undefined) {
