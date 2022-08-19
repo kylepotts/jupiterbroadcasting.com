@@ -28,5 +28,5 @@ jobs:
       - name: Upload Screenshots
         uses: edunad/actions-image@v1.0.1
         with:
-            path: '${{ GITHUB_WORKSPACE}}/test/cypress/screenshots/*.png'
+            path: ${{ GITHUB_WORKSPACE }}/test/cypress/screenshots/*.png
             GITHUB_TOKEN: ${{ secrets.GH_API_TOKEN }}
