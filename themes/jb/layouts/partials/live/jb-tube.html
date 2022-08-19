@@ -6,12 +6,14 @@
   <script type="text/javascript" src="{{ $jbTube.Permalink }}" integrity="{{ $jbTube.Data.Integrity }}"></script>
   <script>
     window.onload = () => {
-      jbLive().then(result => {
+      if(jbLive) {
+        jbLive().then(result => {
         const liveStream = document.getElementById('liveStream')
         if(liveStream != null && liveStream != undefined && result != null && result != undefined) {
           liveStream.src = result
-        }
-      });
+          }
+        });
+      }
     }
   </script>
 {{ end }}
