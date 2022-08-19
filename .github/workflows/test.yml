@@ -29,4 +29,4 @@ jobs:
         uses: edunad/actions-image@v1.0.1
         with:
             path: './test/cypress/screenshots/*.png'
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GH_API_TOKEN }}
