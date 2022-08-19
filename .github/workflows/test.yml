@@ -1,6 +1,6 @@
 name: Cypress Tests
 
-on: [pull_request]
+on: [push]
 
 jobs:
   cypress-run:
@@ -25,8 +25,3 @@ jobs:
         with:
           name: screenshots
           path: test/cypress/screenshots/
-      - name: Upload Screenshots
-        uses: edunad/actions-image@v1.0.1
-        with:
-            path: ${{ github.workspace }}/test/cypress/screenshots/*.png
-            GITHUB_TOKEN: ${{ secrets.GH_API_TOKEN }}
