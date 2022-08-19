@@ -20,3 +20,8 @@ jobs:
         with:
           working-directory: test
           browser: chrome
+      - name: Save screenshots
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots
+          path: /test/cypress/screenshots/
