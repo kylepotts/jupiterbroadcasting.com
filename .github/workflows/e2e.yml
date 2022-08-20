@@ -35,8 +35,9 @@ jobs:
           name: screenshots
           path: test/screenshots/
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v3
+        uses: dorny/test-reporter@v1
         if: always()
         with:
-          report_paths: './test/report.xml'
-          detailed_summary: true
+          name: E2E Tests
+          path: './test/report.xml'
+          reporter: java-junit
