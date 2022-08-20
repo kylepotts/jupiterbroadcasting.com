@@ -11,7 +11,7 @@ jobs:
       - name: run hugo build
         uses: jakejarvis/hugo-build-action@master 
         with:
-          args: --gc --config ./config.toml
+          args: --gc --config ./config.toml -b http://localhost:1313
       - name: run server
         run: |
           cd public && python -m http.server 1313 &
