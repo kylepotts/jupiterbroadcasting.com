@@ -3,7 +3,7 @@ name: E2E Tests
 on: [push]
 
 jobs:
-  cypress-run:
+  e2e-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,9 +28,15 @@ jobs:
         run: python -m playwright install --with-deps
       - name: Run your tests
         working-directory: ./test
-        run: pytest --base-url http://localhost:1313 e2e/*
+        run: pytest --base-url http://localhost:1313 --junitxml report.xml e2e/*
       - name: Save screenshots
         uses: actions/upload-artifact@v2
         with:
           name: screenshots
           path: test/screenshots/
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        working-directory: ./test
+        if: always()
+        with:
+          report_paths: './report.xml'
