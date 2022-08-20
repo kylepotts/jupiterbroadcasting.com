@@ -36,7 +36,6 @@ jobs:
           path: test/screenshots/
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v3
-        working-directory: ./test
         if: always()
         with:
-          report_paths: './report.xml'
+          report_paths: './test/report.xml'
