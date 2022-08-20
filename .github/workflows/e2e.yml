@@ -28,7 +28,7 @@ jobs:
         run: python -m playwright install --with-deps
       - name: Run your tests
         working-directory: ./test
-        run: pytest --base-url http://localhost:1313 --junitxml report.xml e2e/*
+        run: pytest --base-url http://localhost:1313 -v --junitxml report.xml e2e/*
       - name: Save screenshots
         uses: actions/upload-artifact@v2
         with:
