@@ -21,7 +21,8 @@ $RECYCLE.BIN/
 scraped-data
 
 #pytest
-/test/.jbsite
+.jbsite/
+/screenshots/
 /test/screenshots/
-/test/.pytest_cache
-/test/e2e/__pycache__/
+.pytest_cache/
+__pycache__/
