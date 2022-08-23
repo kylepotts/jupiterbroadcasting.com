@@ -1,11 +1,5 @@
 import re
 from playwright.sync_api import Page, expect
-from urllib.parse import urlparse
-
-def get_base_url(page: Page):
-    parsed_url = urlparse(page.url)
-    return "{}://{}".format(parsed_url.scheme, parsed_url.netloc)
-
 
 def test_homepage_screenshot(page: Page):
     page.goto("/")
@@ -48,9 +42,8 @@ def test_rss_feeds(page: Page):
         expect(element).to_contain_text(rss_feed['title'])
 
 
-def test_dropdowns(page: Page):
+def test_dropdowns(page: Page, base_url: str):
     page.goto("/")
-    base_url = get_base_url(page)
 
     expected_dropdown_items = [
         {'href': '/hosts', 'title': 'Hosts'},
