@@ -1,29 +1,31 @@
-
 from pathlib import Path
-from typing import Dict, Generator, List
+from typing import Generator
 from pytest import fixture
 from pytest_base_url.plugin import base_url
 from playwright.sync_api import Playwright, APIRequestContext
+
 
 @fixture
 def screenshot_dir() -> Path:
     return Path('screenshots/')
 
-@fixture
-def expected_rss_feeds() -> List[Dict[str,str,]]:
-    return [
-        { 'href': 'http://feeds2.feedburner.com/JupiterBroadcasting', 'title': 'All Shows Feed - Audio'},
-        { 'href': 'http://feeds2.feedburner.com/AllJupiterVideos', 'title': 'All Shows Feed - Video'},
-        { 'href': 'https://coder.show/rss', 'title': 'Coder Radio'},
-        { 'href': 'https://extras.show/rss', 'title': 'Jupiter EXTRAS'},
-        { 'href': 'https://linuxactionnews.com/rss', 'title': 'Linux Action News'},
-        { 'href': 'https://linuxunplugged.com/rss', 'title': 'LINUX Unplugged'},
-        { 'href': 'https://www.officehours.hair/rss', 'title': 'Office Hours'},
-        { 'href': 'https://selfhosted.show/rss', 'title': 'Self-Hosted'}
-    ]
 
 @fixture
-def expected_dropdown_items() -> Dict[str,List[Dict[str,str]]]:
+def expected_rss_feeds() -> list[dict[str, str, ]]:
+    return [
+        {'href': 'http://feeds2.feedburner.com/JupiterBroadcasting', 'title': 'All Shows Feed - Audio'},
+        {'href': 'http://feeds2.feedburner.com/AllJupiterVideos', 'title': 'All Shows Feed - Video'},
+        {'href': 'https://coder.show/rss', 'title': 'Coder Radio'},
+        {'href': 'https://extras.show/rss', 'title': 'Jupiter EXTRAS'},
+        {'href': 'https://linuxactionnews.com/rss', 'title': 'Linux Action News'},
+        {'href': 'https://linuxunplugged.com/rss', 'title': 'LINUX Unplugged'},
+        {'href': 'https://www.officehours.hair/rss', 'title': 'Office Hours'},
+        {'href': 'https://selfhosted.show/rss', 'title': 'Self-Hosted'}
+    ]
+
+
+@fixture
+def expected_dropdown_items() -> dict[str, list[dict[str, str]]]:
     return {
         "Shows": [
             {'href': '/show/coder-radio/', 'title': 'Coder Radio'},
@@ -52,16 +54,18 @@ def expected_dropdown_items() -> Dict[str,List[Dict[str,str]]]:
         ]
     }
 
+
 @fixture
-def expected_dropdowns() -> List[Dict[str,str]]:
+def expected_dropdowns() -> list[dict[str, str]]:
     return [
         {'title': 'Shows', 'href': '/show/'},
         {'title': 'People', 'href': "/people/"},
         {'title': 'Community', 'href': "/community/"}
     ]
 
+
 @fixture
-def expect_nav_items() -> List[Dict[str,str]]:
+def expect_nav_items() -> list[dict[str, str]]:
     return [
         {'title': 'Sponsors', 'href': '/sponsors/'},
         {'title': 'Live', 'href': '/live/'},
@@ -71,9 +75,11 @@ def expect_nav_items() -> List[Dict[str,str]]:
         {'title': 'Membership', 'href': '/membership/'},
         # commenting out for now PR #399
         # {'title': 'Archive', 'href': '/archive'},
-        # failing on tests here: https://github.com/JupiterBroadcasting/jupiterbroadcasting.com/runs/8254156209?check_suite_focus=true#step:9:26
+        # failing on tests here:
+        # https://github.com/JupiterBroadcasting/jupiterbroadcasting.com/runs/8254156209?check_suite_focus=true#step:9:26
         {'title': 'Contact', 'href': '/contact/'},
     ]
+
 
 # https://playwright.dev/python/docs/api-testing#configure
 # used for doing similar requests to API calls
