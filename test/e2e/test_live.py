@@ -3,30 +3,30 @@ from typing import Tuple, Callable
 from playwright.sync_api import Page, expect, Locator, FrameLocator
 
 
-# def test_live_indicator(
-#         page: Page,
-#         live_event_json: str,
-#         replace_live_event: Callable[[str], None]
-# ):
+def test_live_indicator(
+        page: Page,
+        live_event_json: str,
+        replace_live_event: Callable[[str], None]
+):
 
-#     # intercepting reponses for live event, and make live
-#     replace_live_event(live_event_json)
+    # intercepting reponses for live event, and make live
+    replace_live_event(page, live_event_json)
 
-#     # go to the live page
-#     page.goto("/live")
+    # go to the live page
+    page.goto("/live")
 
-#     # validate live button is red
-#     expect(page.locator("#mainnavigation.is-live").locator("#livebutton")).to_have_css(
-#         name="background-color",
-#         value="rgb(255, 0, 0)",  # red
-#     )
+    # validate live button is red
+    expect(page.locator("#mainnavigation.is-live").locator("#livebutton")).to_have_css(
+        name="background-color",
+        value="rgb(255, 0, 0)",  # red
+    )
 
-#     # waiting for peertube iframe to load
-#     jbtube_video: FrameLocator = page.frame_locator("#liveStream")
-#     video_player_peertube_icon: Locator = jbtube_video.locator(".peertube-dock-avatar")
-#     expect(video_player_peertube_icon).to_be_visible()
+    # waiting for peertube iframe to load
+    jbtube_video: FrameLocator = page.frame_locator("#liveStream")
+    video_player_peertube_icon: Locator = jbtube_video.locator(".peertube-dock-avatar")
+    expect(video_player_peertube_icon).to_be_visible()
 
-#     page.evaluate("window.scrollTo(0, 0)")
+    page.evaluate("window.scrollTo(0, 0)")
 
 
 def test_mobile_live_indicator(
