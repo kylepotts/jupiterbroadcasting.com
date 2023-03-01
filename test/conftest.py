@@ -1,14 +1,15 @@
-
 from pathlib import Path
-from typing import Dict, Generator, List, Tuple, Callable
+from typing import Generator, Callable
 from pytest import fixture
 from _pytest.fixtures import SubRequest
 from pytest_base_url.plugin import base_url
 from playwright.sync_api import Playwright, APIRequestContext, Route, Page, Browser
 
+
 @fixture
 def get_test_dir() -> Path:
     return Path(__file__).parent.absolute()
+
 
 @fixture
 def screenshot_dir() -> Path:
@@ -37,17 +38,30 @@ jq '. | keys' devices.json| less
     ]
 )
 def mobile_device_tuple(
-    # how to access the params
-    request: SubRequest,
-    # browser object given by playwright built-in fixture
-    browser: Browser,
-    # Playwright object given by playwright built-in fixture
-    playwright: Playwright,
-    # from the pytest-base-url plugin Playwright installs (automatically)
-    #   so we're not having to hard-code the URL
-    base_url: base_url,
-) -> Tuple[Page,str]:
-    
+        # how to access the params
+        request: SubRequest,
+        # browser object given by playwright built-in fixture
+        browser: Browser,
+        # Playwright object given by playwright built-in fixture
+        playwright: Playwright,
+        # from the pytest-base-url plugin Playwright installs (automatically)
+        #   so we're not having to hard-code the URL
+        base_url: base_url,
+) -> tuple[Page, str]:
+    """
+    identified all possible device types by running the following in a python interpreter + shell commands
+
+    # python interpreter
+    with sync_playwright() as playwright:
+        Path('./devices.json').write_text(j_dumps(playwright.devices, indent=2))
+
+    # shell cmd
+    jq '. | keys' devices.json| less
+
+    also should be able to view them here:
+    https://github.com/microsoft/playwright/blob/v1.25.2/packages/playwright-core/src/server/deviceDescriptorsSource.json
+    """
+
     # based on here: https://playwright.dev/python/docs/emulation#devices
     context = browser.new_context(
         base_url=base_url,
@@ -56,26 +70,26 @@ def mobile_device_tuple(
     )
     try:
         # essentially a "return", but used with generators
-        yield (context.new_page(), request.param)
-    except Exception as excpt:
-        raise excpt
+        yield context.new_page(), request.param
+    except Exception as e:
+        raise e
     finally:
-        # supposed to get rid of coookies/other stored info after generator is done
+        # supposed to get rid of cookies/other stored info after generator is done
         # https://playwright.dev/python/docs/api/class-apirequestcontext#api-request-context-dispose
         # https://github.com/microsoft/playwright.dev/blob/d9b4a2f3bd0510ea89c87ed230b8241eb33b6688/python/docs/api-testing.mdx#writing-api-test
         context.close()
 
-# https://playwright.dev/python/docs/api-testing#configure
-# used for doing similar requests to API calls
+
 @fixture(scope="session")
 def api_request_context(
-    # base playwright context/object
-    playwright: Playwright,
-    # from the pytest-base-url plugin Playwright installs (automatically)
-    #   so we're not having to hard-code the URL
-    base_url: base_url,
-    # Generator is returned based on Playwright docs
-) -> Generator[APIRequestContext, None, None]:
+        playwright: Playwright,  # base playwright context/object
+        # From the pytest-base-url plugin Playwright installs (automatically) so we're not having to hard-code the URL
+        base_url: base_url,
+) -> Generator[APIRequestContext, None, None]:  # Generator is returned based on Playwright docs
+    """
+    https://playwright.dev/python/docs/api-testing#configure
+    used for doing similar requests to API calls
+    """
     # creates APIRequestContext to allow requests to be made
     #   using the base_url variable (from the plugin) to define
     #   the base_url which'll allow requests relative to that base_url
@@ -87,21 +101,23 @@ def api_request_context(
     # https://github.com/microsoft/playwright.dev/blob/d9b4a2f3bd0510ea89c87ed230b8241eb33b6688/python/docs/api-testing.mdx#writing-api-test
     request_context.dispose()
 
-@fixture
-def expected_rss_feeds() -> List[Dict[str,str,]]:
-    return [
-        { 'href': 'http://feeds2.feedburner.com/JupiterBroadcasting', 'title': 'All Shows Feed - Audio'},
-        { 'href': 'http://feeds2.feedburner.com/AllJupiterVideos', 'title': 'All Shows Feed - Video'},
-        { 'href': 'https://coder.show/rss', 'title': 'Coder Radio'},
-        { 'href': 'https://extras.show/rss', 'title': 'Jupiter EXTRAS'},
-        { 'href': 'https://linuxactionnews.com/rss', 'title': 'Linux Action News'},
-        { 'href': 'https://linuxunplugged.com/rss', 'title': 'LINUX Unplugged'},
-        { 'href': 'https://www.officehours.hair/rss', 'title': 'Office Hours'},
-        { 'href': 'https://selfhosted.show/rss', 'title': 'Self-Hosted'}
-    ]
 
 @fixture
-def expected_dropdown_items() -> Dict[str,List[Dict[str,str]]]:
+def expected_rss_feeds() -> list[dict[str, str, ]]:
+    return [
+        {'href': 'http://feeds2.feedburner.com/JupiterBroadcasting', 'title': 'All Shows Feed - Audio'},
+        {'href': 'http://feeds2.feedburner.com/AllJupiterVideos', 'title': 'All Shows Feed - Video'},
+        {'href': 'https://coder.show/rss', 'title': 'Coder Radio'},
+        {'href': 'https://extras.show/rss', 'title': 'Jupiter EXTRAS'},
+        {'href': 'https://linuxactionnews.com/rss', 'title': 'Linux Action News'},
+        {'href': 'https://linuxunplugged.com/rss', 'title': 'LINUX Unplugged'},
+        {'href': 'https://www.officehours.hair/rss', 'title': 'Office Hours'},
+        {'href': 'https://selfhosted.show/rss', 'title': 'Self-Hosted'}
+    ]
+
+
+@fixture
+def expected_dropdown_items() -> dict[str, list[dict[str, str]]]:
     return {
         "Shows": [
             {'href': '/show/coder-radio/', 'title': 'Coder Radio'},
@@ -130,16 +146,18 @@ def expected_dropdown_items() -> Dict[str,List[Dict[str,str]]]:
         ]
     }
 
+
 @fixture
-def expected_dropdowns() -> List[Dict[str,str]]:
+def expected_dropdowns() -> list[dict[str, str]]:
     return [
         {'title': 'Shows', 'href': '/show/'},
         {'title': 'People', 'href': "/people/"},
         {'title': 'Community', 'href': "/community/"}
     ]
 
+
 @fixture
-def expect_nav_items() -> List[Dict[str,str]]:
+def expect_nav_items() -> list[dict[str, str]]:
     return [
         {'title': 'Sponsors', 'href': '/sponsors/'},
         {'title': 'Live', 'href': '/live/'},
@@ -149,18 +167,22 @@ def expect_nav_items() -> List[Dict[str,str]]:
         {'title': 'Membership', 'href': '/membership/'},
         # commenting out for now PR #399
         # {'title': 'Archive', 'href': '/archive'},
-        # failing on tests here: https://github.com/JupiterBroadcasting/jupiterbroadcasting.com/runs/8254156209?check_suite_focus=true#step:9:26
+        # failing on tests here:
+        # https://github.com/JupiterBroadcasting/jupiterbroadcasting.com/runs/8254156209?check_suite_focus=true#step:9:26
         {'title': 'Contact', 'href': '/contact/'},
     ]
+
 
 @fixture
 def get_live_event(get_test_dir: Path) -> str:
     return Path(get_test_dir / 'fixture_files/jb-live_sample-live-event.json').read_text()
 
+
 @fixture
-def set_live(get_live_event: str) -> Tuple[Callable, str]:
-    return (_replace_live_event,get_live_event)
-    # return replace_live_event
+def set_live(get_live_event: str) -> tuple[Callable, str]:
+    return _replace_live_event, get_live_event
+# return replace_live_event
+
 
 @staticmethod
 def _replace_live_event(page: Page, live_event: str) -> None:
