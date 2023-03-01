@@ -41,6 +41,7 @@ def test_mobile_live_indicator(
 
     # intercepting reponses for live event, and make live
     replace_live_event(mobile_device, live_event_json)
+    replace_live_event(mobile_device, live_event)
 
     mobile_device.goto("/live")
 

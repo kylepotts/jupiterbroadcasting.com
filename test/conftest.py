@@ -16,6 +16,18 @@ def screenshot_dir() -> Path:
     return Path('screenshots/')
 
 
+# identified all possible device types by running the following in a
+#   python interpreter + shell commands
+"""
+# python interpreter
+with sync_playwright() as playwright:
+    Path('./devices.json').write_text(j_dumps(playwright.devices, indent=2))
+
+# shell cmd
+jq '. | keys' devices.json| less
+"""
+# also should be able to view them here:
+# https://github.com/microsoft/playwright/blob/v1.25.2/packages/playwright-core/src/server/deviceDescriptorsSource.json
 @fixture(
     # doing session so it doesn't have to be re-created for each usage
     scope="session",
@@ -64,6 +76,7 @@ def mobile_device_tuple(
         base_url=base_url,
         # based on this info: https://playwright.dev/python/docs/emulation#devices
         **params
+
     )
     try:
         # essentially a "return", but used with generators
